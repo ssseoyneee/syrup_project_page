@@ -1,1 +1,1 @@
-# SPRInG Project Page
+# SyRuP Project Page
