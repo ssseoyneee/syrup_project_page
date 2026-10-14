@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="description"
-        content="SPRInG: A novel semi-parametric framework for effective continual personalization that adapts to evolving user preferences without catastrophic forgetting.">
-  <meta name="keywords" content="SPRInG, Continual Personalization, Large Language Models, LLM, User Preference Drift, Semi-parametric Framework, Machine Learning">
+        content="SyRuP: A decoding-time framework that improves system-prompt following of a frozen LLM with a cross-attention reward head and a contrastive signal.">
+  <meta name="keywords" content="SyRuP, System Prompt Following, Reward-Guided Decoding, Contrastive Decoding, Large Language Models, LLM, Instruction Following">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SPRInG: Continual LLM Personalization via Selective Parametric Adaptation and Retrieval-Interpolated Generation</title>
-  <link rel="icon" href="https://fav.farm/🌱" />
+  <title>SyRuP: Enhancing System-Prompt Following via Reward-Guided Prediction in LLM Decoding</title>
+  <link rel="icon" href="https://fav.farm/🍯" />
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -31,7 +31,6 @@
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="icon" href="./static/images/favicon.svg">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
@@ -39,15 +38,24 @@
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    .result-table { font-size: 0.95rem; margin: 0 auto; }
+    .result-table th, .result-table td { text-align: center !important; vertical-align: middle; white-space: nowrap; }
+    .result-table th:first-child, .result-table td:first-child { text-align: left !important; }
+    .result-table tr.ours td { background-color: #fdf3e1; }
+    .result-table tr.ours td:first-child { font-weight: 700; }
+    .result-table tr.group-start td { border-top: 2px solid #dbdbdb; }
+    .result-table .second { text-decoration: underline; }
+  </style>
 </head>
 <body>
 
 <nav class="navbar lab-nav" role="navigation" aria-label="main navigation">
   <div class="navbar-center">
-    <a class="navbar-item brand-combo" 
-       href="https://ml3-yonsei.github.io/" 
+    <a class="navbar-item brand-combo"
+       href="https://ml3-yonsei.github.io/"
        target="_blank" rel="noopener noreferrer">
       <img src="./static/images/ML3_transparent.png" alt="Lab logo" class="brand-logo">
       <span class="brand-text">
@@ -63,11 +71,12 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-3 publication-title">SPRInG: Continual LLM Personalization via Selective Parametric Adaptation and Retrieval-Interpolated Generation
-</h1>
+          <h1 class="title is-3 publication-title">SyRuP: Enhancing System-Prompt Following via Reward-Guided Prediction in LLM Decoding</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
               <a href="">Seoyeon Kim</a>,</span>
+            <span class="author-block">
+              <a href="">Minjae Kang</a>,</span>
             <span class="author-block">
               <a href="https://sites.google.com/view/jaehyungkim">Jaehyung Kim</a></span>
           </div>
@@ -79,7 +88,7 @@
           <div class="column has-text-centered">
             <div class="publication-links">
               <span class="link-block">
-                <a href="https://arxiv.org/pdf/2601.09974"
+                <a href="https://arxiv.org/pdf/2607.23991"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fas fa-file-pdf"></i>
@@ -88,7 +97,7 @@
                 </a>
               </span>
               <span class="link-block">
-                <a href="https://arxiv.org/abs/2601.09974"
+                <a href="https://arxiv.org/abs/2607.23991"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="ai ai-arxiv"></i>
@@ -97,7 +106,7 @@
                 </a>
               </span>
               <span class="link-block">
-                <a href="https://github.com/ssseoyneee/SPRInG"
+                <a href="https://github.com/ssseoyneee/EMNLP26_SyRuP"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fab fa-github"></i>
@@ -117,14 +126,14 @@
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <img src="./static/images/spring_teaser.png" 
-           alt="Teaser image" 
-           style="width:80%; max-width:800px; height:auto; display:block; margin:0 auto 2rem auto;">
-      
+      <img src="./static/images/syrup_teaser.png"
+           alt="Standard reward-guided decoding versus SyRuP's system-conditioned reward-guided decoding"
+           style="width:70%; max-width:700px; height:auto; display:block; margin:0 auto 2rem auto;">
+
       <h2 class="subtitle has-text-centered">
-        <span class="dnerf"><strong>SPRInG</strong></span>
-        (<strong>S</strong>elective <strong>P</strong>arametric adaptation and <strong>R</strong>etrieval-<strong>In</strong>terpolated <strong>G</strong>eneration) <br>
-        adapts LLMs to evolving user preferences.
+        <span class="dnerf"><strong>SyRuP</strong></span>
+        (<strong>Sy</strong>stem-prompt following via <strong>R</strong>eward-g<strong>u</strong>ided <strong>P</strong>rediction) <br>
+        keeps the system prompt as a distinct conditioning source and steers a frozen LLM toward it, token by token.
       </h2>
     </div>
   </div>
@@ -138,24 +147,21 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Personalizing Large Language Models typically relies on static retrieval or one-time adaptation, 
-            assuming user preferences remain invariant over time. 
-            However, real-world interactions are dynamic, where user interests continuously evolve, 
-            posing a challenge for models to <strong>adapt to preference drift</strong> without catastrophic forgetting. 
-            Standard continual learning approaches often struggle in this context, as they indiscriminately update on noisy interaction streams, 
-            failing to distinguish genuine preference shifts from transient contexts. 
+            Large Language Models (LLMs) are increasingly controlled through <strong>system prompts</strong> that specify roles, formats, and safety requirements.
+            However, models follow these prompts only implicitly through in-context learning, which can be insufficient for complex or compositional prompts.
+            Existing approaches often require model tuning or response-level reranking, limiting their practicality for lightweight inference-time control.
           </p>
           <p>
-            To address this, we introduce <strong>SPRInG</strong>, a novel <strong>semi-parametric framework</strong> designed for effective <strong>continual personalization</strong>. 
+            We introduce <strong>SyRuP</strong>, a <strong>decoding-time framework</strong> for improving system-prompt adherence while keeping the base LM frozen.
           </p>
           <p>
-            During training, SPRInG employs drift-driven selective adaptation, which utilizes a likelihood-based scoring function to identify high-novelty interactions. 
-            This allows the model to selectively update the user-specific adapter on drift signals while preserving hard-to-learn residuals in a replay buffer.
-            During inference, we apply strict relevance gating and fuse parametric knowledge with retrieved history via logit interpolation. 
+            SyRuP trains a <strong>cross-attention reward head</strong> from system-prompt-conditioned preference pairs, treating the system prompt as a separate memory to produce token-level adherence scores.
+            At inference, SyRuP reranks the base LM's top-<em>k</em> candidates by combining base logits with both the learned reward signal and a <strong>contrastive signal</strong> that captures system-induced logit shifts.
           </p>
           <p>
-            Experiments on the long-form personalized generation benchmark demonstrate that SPRInG outperforms existing baselines, validating its robustness for real-world continual personalization.
-          </p>        
+            Experiments on system-prompt following benchmarks show that SyRuP consistently outperforms prompting and decoding-time baselines with moderate inference overhead.
+            These results suggest that explicit token-level guidance is an effective and practical mechanism for reliable system-prompt following.
+          </p>
         </div>
       </div>
     </div>
@@ -173,28 +179,30 @@
       <div class="column is-11">
         <div class="box" style="border: 1px solid #eee; box-shadow: none; border-radius: 20px; padding: 2.5rem;">
           <h3 class="title is-4 mb-4" style="display: flex; align-items: center;">
-            <span style="background: #4a4a4a; color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; font-size: 1rem; margin-right: 15px; font-weight: bold;">1</span>
-            Limitations in Existing Personalization Methods
+            <span style="background: #4a4a4a; color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; font-size: 1rem; margin-right: 15px; font-weight: bold; flex-shrink: 0;">1</span>
+            System Prompts Are Followed Only Implicitly
           </h3>
           <p class="is-size-6 mb-5">
-            Existing LLM personalization methods primarily rely on a <strong>time-invariant</strong> view of the user. Fixed histories are repeatedly used for retrieval, or parametric models are frozen after initial training, failing to account for constant <strong>preference drifts</strong>.
+            System prompts are persistent, high-priority instructions that govern model behavior throughout an interaction.
+            Yet at inference time, an LLM must follow a given system prompt <strong>solely through conditioning</strong>, without explicit optimization for that particular prompt.
+            As system prompts become more <strong>complex and compositional</strong>, models often fail to adhere to them consistently.
           </p>
 
           <div class="columns">
             <div class="column">
               <div style="border-left: 4px solid #696969; padding-left: 1.2rem; height: 100%;">
-                <p class="title is-6 mb-2">Non-parametric Strategies</p>
-                <p class="is-size-6 has-text-grey mb-3">Leveraging retrieved interaction histories or user profiles during prompting.</p>
-                <p class="is-size-6 has-text-danger-dark" style="font-weight: 600;">❌ Weak recency signals</p>
-                <p class="is-size-6 has-text-danger-dark" style="font-weight: 600;">❌ Costs of storage/retrieval</p>
+                <p class="title is-6 mb-2">Training-time Approaches</p>
+                <p class="is-size-6 has-text-grey mb-3">Improving general instruction following through SFT or RLHF.</p>
+                <p class="is-size-6 has-text-danger-dark" style="font-weight: 600;">❌ Costly parameter updates</p>
+                <p class="is-size-6 has-text-danger-dark" style="font-weight: 600;">❌ Possible alignment tax</p>
               </div>
             </div>
             <div class="column">
               <div style="border-left: 4px solid #696969; padding-left: 1.2rem; height: 100%;">
-                <p class="title is-6 mb-2">Parametric Strategies</p>
-                <p class="is-size-6 has-text-grey mb-3">Encoding user preferences through direct parameter adaptation (e.g., LoRA).</p>
-                <p class="is-size-6 has-text-danger-dark" style="font-weight: 600;">❌ Expensive updates</p>
-                <p class="is-size-6 has-text-danger-dark" style="font-weight: 600;">❌ Catastrophic forgetting.</p>
+                <p class="title is-6 mb-2">Decoding-time Approaches</p>
+                <p class="is-size-6 has-text-grey mb-3">Steering a frozen model during generation.</p>
+                <p class="is-size-6 has-text-danger-dark" style="font-weight: 600;">❌ Focused on generic instruction following</p>
+                <p class="is-size-6 has-text-danger-dark" style="font-weight: 600;">❌ No explicit judgment of system-prompt adherence</p>
               </div>
             </div>
           </div>
@@ -206,23 +214,23 @@
       <div class="column is-11">
         <div class="box" style="border: 1px solid #eee; box-shadow: none; border-radius: 20px; padding: 2.5rem;">
           <h3 class="title is-4 mb-4" style="display: flex; align-items: center;">
-            <span style="background: #4a4a4a; color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; font-size: 1rem; margin-right: 15px; font-weight: bold;">2</span>
-            Standard CL vs. Personalization Reality
+            <span style="background: #4a4a4a; color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; font-size: 1rem; margin-right: 15px; font-weight: bold; flex-shrink: 0;">2</span>
+            Gaps in Existing Decoding-time Signals
           </h3>
           <p class="is-size-6 mb-5">
-            While Continual Learning (CL) offers a path to sequential updates, standard approaches are suboptimal because user interaction streams are <strong>inherently continuous and noisy</strong>.
+            Two lines of decoding-time work are natural candidates for system-prompt following, but neither treats the system prompt as an explicit criterion for next-token selection.
           </p>
-          
+
           <div class="columns has-text-centered mb-4">
             <div class="column">
-              <p class="mb-2" style="font-size: 2.5rem;">🚧</p>
-              <p class="title is-5 mb-2">No Clear Boundaries</p>
-              <p class="is-size-6 has-text-grey">Preferences drift gradually rather than exhibiting discrete task shifts or abrupt distribution changes.</p>
+              <p class="mb-2" style="font-size: 2.5rem;">🧩</p>
+              <p class="title is-5 mb-2">Reward-guided Decoding</p>
+              <p class="is-size-6 has-text-grey">Reward models process the prompt and response as a single sequence, so the system prompt is <strong>absorbed into the prefix</strong>. They also target fixed, task-level attributes rather than instance-specific constraints.</p>
             </div>
             <div class="column" style="border-left: 1px solid #eee;">
-              <p class="mb-2" style="font-size: 2.5rem;">🌪️</p>
-              <p class="title is-5 mb-2">Transient Noise</p>
-              <p class="is-size-6 has-text-grey">Transient noise can be mistaken for informative drift due to high loss or uncertainty metrics.</p>
+              <p class="mb-2" style="font-size: 2.5rem;">🔍</p>
+              <p class="title is-5 mb-2">Contrastive Decoding</p>
+              <p class="is-size-6 has-text-grey">The logit difference with and without the context is a training-free cue for the LM's sensitivity to the system prompt, but it remains <strong>implicit</strong> and gives no learned judgment of whether a token satisfies the prompt.</p>
             </div>
           </div>
         </div>
@@ -238,11 +246,12 @@
         <div class="has-text-centered">
           <h4 class="title is-4 mb-4">
             <span class="icon is-medium has-text-warning mr-2"><i class="fas fa-lightbulb"></i></span>
-            Our Approach: <strong>SPRInG</strong>
+            Our Approach: <strong>SyRuP</strong>
           </h4>
-                    
+
           <p class="is-size-6 has-text-grey-dark">
-            Our key insight is to <strong>jointly utilize parametric and non-parametric approaches</strong> for distinct yet complementary roles, capturing genuine drifts while preserving historical context.
+            We reformulate system-prompt following not as simple prefix conditioning, but as a <strong>token-level conditional adherence problem</strong> between a fixed system instruction and an evolving generation state.
+            An explicit, learned reward signal is then reinforced by the LM's intrinsic contrastive signal.
           </p>
         </div>
       </div>
@@ -254,39 +263,41 @@
 <section class="section" style="padding-top: 4rem;">
   <div class="container is-max-desktop">
     <div class="has-text-centered mb-6">
-      <h2 class="title is-3" style="font-weight: 800; letter-spacing: -1px;">How SPRInG Works</h2>
+      <h2 class="title is-3" style="font-weight: 800; letter-spacing: -1px;">How SyRuP Works</h2>
     </div>
 
     <div class="columns is-centered">
       <div class="column is-11">
         <div class="box p-0 mb-6" style="border-radius: 12px; overflow: hidden; box-shadow: none;">
-          <img src="./static/images/spring_method.png" alt="SPRInG Method Overview" style="width: 100%; display: block;">
+          <img src="./static/images/syrup_method.png" alt="SyRuP method overview: training the cross-attention reward head and reward-guided decoding" style="width: 100%; display: block;">
         </div>
 
         <div class="columns is-multiline">
-          
+
           <div class="column is-12 mb-2">
             <div class="notification is-light" style="border-radius: 20px; border: 1px solid #ddd; padding: 2.5rem; box-shadow: none; background-color: #f9f9f9;">
-              <div class="is-flex is-align-items-center mb-4">
-                <span class="tag is-medium mr-3" style="font-weight: 800; border-radius: 6px; background-color: #DB4D81; color: white;">TRAINING</span>
-                <h3 class="title is-4 mb-0" style="color: #DB4D81;">Drift-Driven Selective Adaptation</h3>
+              <div class="is-flex is-align-items-center mb-4" style="flex-wrap: wrap; gap: 0.5rem;">
+                <span class="tag is-medium mr-3" style="font-weight: 800; border-radius: 6px; background-color: #D64545; color: white;">TRAINING</span>
+                <h3 class="title is-4 mb-0" style="color: #D64545;">Cross-attention Reward Head</h3>
               </div>
-              
+
               <div class="content is-size-6">
                 <p class="mb-4">
-                  SPRInG updates the LoRA adapter <strong>exclusively on high-drift interactions</strong>, ensuring the model adapts to genuine preference evolution while filtering out transient noise.
+                  Rather than merging the system prompt, user query, and generated prefix into a single hidden feature, SyRuP keeps the <strong>system prompt as a separate key-value memory</strong> that a lightweight reward head attends to at each decoding step.
                 </p>
-                
-                <div style="background: #ffffff; padding: 1.5rem; border-radius: 12px; border-left: 5px solid #DB4D81;" class="mb-5">
-                  <p class="is-size-7 has-text-grey mb-3" style="font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Drift Score</p>
-                  <div class="is-size-5 has-text-centered mb-1">
-                    $$ \mathcal{S}(q, a) = \underbrace{-\log \frac{p_\texttt{adap}}{p_\texttt{base}}}_{\text{Novelty}} + \underbrace{\alpha \cdot \log p_\texttt{base}}_{\text{Quality}} $$
+
+                <div style="background: #ffffff; padding: 1.5rem; border-radius: 12px; border-left: 5px solid #D64545;" class="mb-5">
+                  <p class="is-size-7 has-text-grey mb-3" style="font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Cross-attention Scoring</p>
+                  <div class="is-size-5 has-text-centered mb-1" style="overflow-x: auto;">
+                    $$ \mathbf{A}_t = \mathrm{softmax}\!\left(\frac{\mathbf{Q}_t \mathbf{K}_s^\top}{\sqrt{d}}\right)\mathbf{V}_s $$
+                    $$ r_t(v) = \mathbf{z}_t^\top \mathbf{e}_v $$
                   </div>
                 </div>
-          
+
                 <ul class="ml-4" style="line-height: 1.6;">
-                  <li class="mb-2"><strong>Drift Sample Selection:</strong> Distinguishes meaningful preference shifts from uninformative noise by balancing <em>pattern novelty</em> with <em>linguistic quality</em>.</li>
-                  <li class="mb-2"><strong>Residual Replay Buffer:</strong> Preserves <strong>hard-to-learn interactions</strong> that remain challenging even after the adapter update, preventing the loss of sparse historical nuances.</li>
+                  <li class="mb-2"><strong>System Prompt as Memory:</strong> Keys and values come from the system-prompt hidden states \(\mathbf{H}^{(s)}\), while queries come from the concatenated user-input and generated-prefix hidden states. The system-prompt memory can be cached and reused across decoding steps.</li>
+                  <li class="mb-2"><strong>Token-level Reward:</strong> The fused representation at the most recent position, \(\mathbf{z}_t\), scores each candidate token through the frozen output embeddings \(\mathbf{e}_v\).</li>
+                  <li class="mb-2"><strong>Pairwise Training:</strong> Trained on system-prompt-conditioned preference pairs with a Bradley&ndash;Terry objective over averaged token rewards. Only the cross-attention projections and fusion MLP are updated; <strong>the base LM stays frozen</strong>.</li>
                 </ul>
               </div>
             </div>
@@ -294,24 +305,25 @@
 
           <div class="column is-12">
             <div class="notification is-light" style="border-radius: 20px; border: 1px solid #ddd; padding: 2.5rem; box-shadow: none; background-color: #f9f9f9;">
-              <div class="is-flex is-align-items-center mb-4">
-                <span class="tag is-medium mr-3" style="font-weight: 800; border-radius: 6px; background-color: #7B9264; color: white;">INFERENCE</span>
-                <h3 class="title is-4 mb-0" style="color: #7B9264;">Gated Retrieval & Interpolation</h3>
+              <div class="is-flex is-align-items-center mb-4" style="flex-wrap: wrap; gap: 0.5rem;">
+                <span class="tag is-medium mr-3" style="font-weight: 800; border-radius: 6px; background-color: #ED8A00; color: white;">DECODING</span>
+                <h3 class="title is-4 mb-0" style="color: #ED8A00;">Reward-guided Decoding</h3>
               </div>
 
               <div class="content is-size-6">
-                <p class="mb-4">Dynamically fuses <strong>internalized parametric knowledge</strong> of stable patterns with <strong>explicit non-parametric context</strong> from the replay buffer at the <strong>logit level</strong>, ensuring responses reflect both long-term traits and specific historical details.</p>
+                <p class="mb-4">At each step, SyRuP reranks only the base LM's <strong>top-<em>k</em> candidates</strong>, combining base plausibility with the <strong>learned reward</strong> and a <strong>contrastive signal</strong> that measures how the system prompt shifts the base LM's logits relative to a neutral prompt.</p>
 
-                <div style="background: #ffffff; padding: 1.5rem; border-radius: 12px; border-left: 5px solid #7B9264;" class="mb-5">
-                  <p class="is-size-7 has-text-grey mb-3" style="font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Logit Interpolation</p>
-                  <div class="is-size-5 has-text-centered mb-1">
-                    $$ p_\texttt{fin} = \lambda \cdot p_\texttt{ret} + (1 - \lambda) \cdot p_\texttt{par} $$
+                <div style="background: #ffffff; padding: 1.5rem; border-radius: 12px; border-left: 5px solid #ED8A00;" class="mb-5">
+                  <p class="is-size-7 has-text-grey mb-3" style="font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Decoding Rule</p>
+                  <div class="is-size-5 has-text-centered mb-1" style="overflow-x: auto;">
+                    $$ y_t = \arg\max_{v \in \mathcal{C}_t} \Big[\, \ell_t(v) + \lambda_r\, r_t(v) + \lambda_c\, \Delta_t(v) \,\Big] $$
+                    $$ \Delta_t(v) = \ell_t(v) - \ell_t^{\mathrm{neu}}(v) $$
                   </div>
                 </div>
 
                 <ul class="ml-4" style="line-height: 1.6;">
-                  <li class="mb-2"><strong>Relevance Gating:</strong> Applies a similarity threshold to ensure retrieval only occurs when strong historical evidence exists.</li>
-                  <li class="mb-2"><strong>Dual-path Fusion:</strong> Interpolates the Parametric Path and Retrieval-augmented Path to leverage complementary signals, combining internalized preference patterns with specific historical evidence.</li>
+                  <li class="mb-2"><strong>Top-<em>k</em> Reranking:</strong> Intervenes only among tokens that are already plausible under the base model, preserving fluency and avoiding full-vocabulary reward computation.</li>
+                  <li class="mb-2"><strong>Complementary Signals:</strong> The reward \(r_t\) is an explicit, trained adherence evaluator, while \(\Delta_t\) reflects the base LM's intrinsic sensitivity to the system prompt. Setting \(\lambda_c = 0\) gives reward-only decoding, \(\lambda_r = 0\) gives contrastive-only decoding, and both at zero recovers greedy decoding.</li>
                 </ul>
               </div>
             </div>
@@ -330,14 +342,36 @@
 
     <div class="columns is-centered mb-6">
       <div class="column is-11">
-        <div class="box p-0 mb-4" style="border-radius: 12px; overflow: hidden; box-shadow: none;">
-          <img src="./static/images/main_results.png" alt="Main Results" style="width: 100%; display: block;">
+        <h3 class="title is-5 has-text-centered mb-4">Main Results on Multifaceted-Bench</h3>
+        <div class="table-container">
+          <table class="table is-narrow is-hoverable result-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Qwen2.5-1.5B</th>
+                <th>Llama-3.2-3B</th>
+                <th>Llama-3.1-8B</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Base</td><td>3.25</td><td>3.81</td><td>3.91</td></tr>
+              <tr class="group-start"><td>*-marked</td><td>3.56</td><td>3.84</td><td>3.96</td></tr>
+              <tr><td>"-marked</td><td>3.45</td><td>3.69</td><td>3.86</td></tr>
+              <tr><td>Few-shot</td><td>3.35</td><td>3.77</td><td>3.95</td></tr>
+              <tr class="group-start"><td>OPAD</td><td>3.51</td><td>3.95</td><td>4.11</td></tr>
+              <tr><td>GenARM</td><td class="second">3.74</td><td class="second">4.08</td><td class="second">4.18</td></tr>
+              <tr><td>ARGS</td><td>3.19</td><td>3.86</td><td>4.00</td></tr>
+              <tr><td>Bo<em>N</em></td><td>3.60</td><td>3.92</td><td>4.04</td></tr>
+              <tr><td>DeAL</td><td>3.37</td><td>3.88</td><td>4.02</td></tr>
+              <tr class="ours group-start"><td>SyRuP (Ours)</td><td><strong>3.95</strong></td><td><strong>4.23</strong></td><td><strong>4.32</strong></td></tr>
+            </tbody>
+          </table>
         </div>
+        <p class="is-size-7 has-text-grey has-text-centered mb-4">LLM-judge scores (1&ndash;5) averaged over mf-AlpacaEval, mf-Koala, mf-MT-Bench, mf-Self-Instruct, and mf-FLASK. Bold: best, underlined: second best.</p>
         <div class="content is-size-6 has-text-centered">
           <p>
-            <strong>SPRInG consistently outperforms all baselines</strong> in both Abstract Generation and Review Writing tasks. 
-            It achieves relative improvements of up to 15.85% in ROUGE-L over the strongest continual learning baselines. 
-            While standard RAG and PAG methods often struggle with noisy contexts, SPRInG effectively balances plasticity and stability by selectively leveraging beneficial history.
+            <strong>SyRuP achieves the best score on all 15 model&ndash;task combinations</strong>, improving the average over the strongest baseline by 5.58%, 3.67%, and 3.47% on Qwen2.5-1.5B, Llama-3.2-3B, and Llama-3.1-8B.
+            The gain is largest on the smaller Qwen2.5-1.5B model, where SyRuP lifts the average score by 21.54% over vanilla decoding (3.25 &rarr; 3.95).
           </p>
         </div>
       </div>
@@ -345,22 +379,103 @@
 
     <div class="columns is-centered mb-6">
       <div class="column is-6">
-        <div class="box p-0 mb-3" style="border-radius: 12px; overflow: hidden; box-shadow: none;">
-          <img src="./static/images/selective_adaptation.png" alt="Selective Adaptation" style="width: 100%; display: block;">
+        <h3 class="title is-5 has-text-centered mb-4">OOD Transfer: IFEval</h3>
+        <div class="table-container">
+          <table class="table is-narrow is-hoverable result-table">
+            <thead>
+              <tr><th>Method</th><th>Qwen-1.5B</th><th>Llama-3B</th><th>Llama-8B</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Base</td><td>31.54</td><td>62.34</td><td>65.31</td></tr>
+              <tr><td>OPAD</td><td>37.66</td><td class="second">65.12</td><td>69.20</td></tr>
+              <tr><td>GenARM</td><td class="second">41.00</td><td>63.08</td><td><strong>71.43</strong></td></tr>
+              <tr><td>DeAL</td><td>36.92</td><td><strong>67.53</strong></td><td>68.10</td></tr>
+              <tr class="ours"><td>SyRuP</td><td><strong>41.19</strong></td><td class="second">65.12</td><td class="second">71.24</td></tr>
+            </tbody>
+          </table>
         </div>
         <div class="content is-size-6 has-text-centered">
           <p>
-            Our Top-30% strategy outperforms training on 100% of data, confirming that focusing on high-drift interactions filters out redundant noise and enhances adaptation efficiency.
+            Without any IFEval-specific training or tuning, SyRuP reaches the highest mean strict prompt-level accuracy across the three backbones (GenARM 58.50 &rarr; <strong>59.18</strong>).
+          </p>
+        </div>
+      </div>
+      <div class="column is-6">
+        <h3 class="title is-5 has-text-centered mb-4">OOD Transfer: IHEval Rule Following</h3>
+        <div class="table-container">
+          <table class="table is-narrow is-hoverable result-table">
+            <thead>
+              <tr><th rowspan="2">Method</th><th colspan="2">Single-turn</th><th colspan="2">Multi-turn</th></tr>
+              <tr><th>Aligned</th><th>Conflict</th><th>Aligned</th><th>Conflict</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Base</td><td>28.65</td><td>12.20</td><td>23.66</td><td>6.47</td></tr>
+              <tr><td>OPAD</td><td>36.97</td><td>15.90</td><td>34.38</td><td>6.10</td></tr>
+              <tr><td>GenARM</td><td class="second">40.67</td><td class="second">19.22</td><td class="second">38.08</td><td class="second">9.61</td></tr>
+              <tr class="ours"><td>SyRuP</td><td><strong>45.10</strong></td><td><strong>24.21</strong></td><td><strong>49.35</strong></td><td><strong>24.95</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="content is-size-6 has-text-centered">
+          <p>
+            SyRuP is best in all four settings on Qwen2.5-1.5B. In the multi-turn conflict setting, accuracy rises from 9.61 to <strong>24.95</strong>, showing that system-level priority is preserved when user instructions conflict with the system prompt.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered mb-6">
+      <div class="column is-11">
+        <h3 class="title is-5 has-text-centered mb-4">Inference Cost</h3>
+        <div class="table-container">
+          <table class="table is-narrow is-hoverable result-table">
+            <thead>
+              <tr><th>Method</th><th>ms / token</th><th>Peak mem. (GB)</th><th>Latency</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Base</td><td>24.4</td><td>2.9</td><td>1.00&times;</td></tr>
+              <tr class="group-start"><td>OPAD</td><td>48.7</td><td>3.0</td><td>2.00&times;</td></tr>
+              <tr><td>GenARM</td><td>68.2</td><td>6.4</td><td>2.80&times;</td></tr>
+              <tr><td>ARGS</td><td>125.0</td><td>10.2</td><td>5.13&times;</td></tr>
+              <tr><td>DeAL</td><td>410.3</td><td>10.4</td><td>16.83&times;</td></tr>
+              <tr class="group-start"><td>Reward-only</td><td>25.5</td><td>3.1</td><td>1.04&times;</td></tr>
+              <tr><td>CS-only</td><td>49.1</td><td>3.0</td><td>2.02&times;</td></tr>
+              <tr class="ours"><td>SyRuP</td><td>53.0</td><td>3.1</td><td>2.18&times;</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="content is-size-6 has-text-centered">
+          <p>
+            The reward head is lightweight, so Reward-only adds just 4% latency; most of SyRuP's overhead comes from the extra forward pass for the contrastive signal.
+            SyRuP stays well below GenARM, ARGS, and DeAL in latency and keeps peak GPU memory close to the base model, since it <strong>does not need a separate reward LLM</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="has-text-centered mb-5">
+      <h3 class="title is-4" style="font-weight: 800;">Analyses</h3>
+    </div>
+
+    <div class="columns is-centered mb-6">
+      <div class="column is-6">
+        <div class="box p-0 mb-3" style="border-radius: 12px; overflow: hidden; box-shadow: none;">
+          <img src="./static/images/weight_effect.png" alt="Effect of the reward weight and the contrastive weight" style="width: 100%; display: block;">
+        </div>
+        <div class="content is-size-6 has-text-centered">
+          <p>
+            <strong>Reward and contrastive signals are complementary.</strong> Reward-only and CS-only reach 3.43 and 3.68, while their combination reaches 3.95.
+            Moderate weights work best (stars), so neither signal should dominate the base LM.
           </p>
         </div>
       </div>
       <div class="column is-6">
         <div class="box p-0 mb-3" style="border-radius: 12px; overflow: hidden; box-shadow: none;">
-          <img src="./static/images/interpolation.png" alt="Interpolation" style="width: 100%; display: block;">
+          <img src="./static/images/token_choices.png" alt="Breakdown of token choices made by SyRuP" style="width: 100%; display: block;">
         </div>
         <div class="content is-size-6 has-text-centered">
           <p>
-            Balanced logit interpolation yields the best results by combining stable parametric traits with specific historical details from the residual buffer.
+            <strong>9.8% of SyRuP's tokens are SyRuP-unique</strong>, meaning no single signal (base LM, reward, or contrastive) ranks them first. These choices arise only from integrating the signals.
           </p>
         </div>
       </div>
@@ -369,11 +484,12 @@
     <div class="columns is-centered mb-6">
       <div class="column is-11">
         <div class="box p-0 mb-4" style="border-radius: 12px; overflow: hidden; box-shadow: none;">
-          <img src="./static/images/scalability.png" alt="Scalability" style="width: 100%; display: block;">
+          <img src="./static/images/reward_head.png" alt="Effect of reward-head conditioning" style="width: 100%; display: block;">
         </div>
         <div class="content is-size-6 has-text-centered">
           <p>
-            SPRInG demonstrates robust scalability across varying interaction volumes. 
+            <strong>Explicit system-prompt conditioning matters.</strong> The cross-attention reward head outperforms variants that drop the system prompt (No-system) or encode everything as a single stream (Single-stream).
+            The gap is clearest under Reward-only, where the reward head is the sole steering signal.
           </p>
         </div>
       </div>
@@ -381,17 +497,17 @@
 
   </div>
 </section>
-  
+
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title has-text-centered is-3">BibTeX</h2>
-    
+
     <div class="columns is-centered">
       <div class="column is-11">
-        <pre style="text-align: left; background-color: #f5f5f5; padding: 1.5rem;"><code>@article{kim2026spring,
-  title     = {SPRInG: Continual LLM Personalization via Selective Parametric Adaptation and Retrieval-Interpolated Generation},
-  author    = {Kim, Seoyeon and Kim, Jaehyung},
-  journal   = {arXiv preprint arXiv:2601.09974},
+        <pre style="text-align: left; background-color: #f5f5f5; padding: 1.5rem;"><code>@article{kim2026syrup,
+  title     = {SyRuP: Enhancing System-Prompt Following via Reward-Guided Prediction in LLM Decoding},
+  author    = {Kim, Seoyeon and Kang, Minjae and Kim, Jaehyung},
+  journal   = {arXiv preprint arXiv:2607.23991},
   year      = {2026}
 }</code></pre>
       </div>
